@@ -1,0 +1,9 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+semgrep-results.json
+gitleaks.json
+gitleaks-history.json
+AUDIT_REPORT.md
+__pycache__/
