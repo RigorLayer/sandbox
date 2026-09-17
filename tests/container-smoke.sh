@@ -12,6 +12,21 @@ codex --version
 semgrep --version
 gitleaks version
 gh --version
+node --version
+python3 --version
+shellcheck --version
+uname -m
+command -v clone.sh reset.sh
+clone.sh --help
+reset.sh --help
+[[ -w /audit && ! -L /audit ]]
+[[ ! -w /opt/audit ]]
+[[ ! -w /opt/audit/audit-workflow.py ]]
+[[ -r /opt/audit/INSTRUCTIONS.md ]]
+[[ -r /home/vscode/.claude/CLAUDE.md ]]
+[[ -r /home/vscode/.codex/AGENTS.md ]]
+volume_probe=$(mktemp -d /audit/.smoke-XXXXXXXX)
+rmdir "$volume_probe"
 
 fixture=$(mktemp -d)
 trap 'rm -rf -- "$fixture"' EXIT
@@ -37,8 +52,8 @@ regex = '''AUDIT_SMOKE_[A-Z]{12}'''
 TOML
 printf 'AUDIT_SMOKE_ABCDEFGHIJKL\n' > secret.txt
 status=0
-gitleaks dir --config gitleaks.toml --redact --report-format json \
+gitleaks dir --config gitleaks.toml --redact --exit-code 10 --report-format json \
     --report-path gitleaks.json . || status=$?
-[[ $status == 1 ]]
+[[ $status == 10 ]]
 jq -e 'length == 1 and .[0].Secret == "REDACTED"' gitleaks.json >/dev/null
 printf '\nContainer isolation and scanner smoke checks passed.\n'

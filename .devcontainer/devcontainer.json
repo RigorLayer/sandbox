@@ -2,14 +2,17 @@
   "name": "Universal AI Audit Sandbox",
   "build": {
     "dockerfile": "Dockerfile",
-    "context": "."
+    "context": ".."
   },
   "containerUser": "vscode",
   "remoteUser": "vscode",
-  "updateRemoteUserUID": true,
+  "updateRemoteUserUID": false,
   "init": true,
   "overrideCommand": false,
-  "runArgs": ["--cap-drop=ALL", "--security-opt=no-new-privileges:true"],
+  "runArgs": [
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges:true"
+  ],
   "remoteEnv": {
     "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}",
     "OPENAI_API_KEY": "${localEnv:OPENAI_API_KEY}",
@@ -29,5 +32,7 @@
         "git.autofetch": false
       }
     }
-  }
+  },
+  "workspaceMount": "source=audit-${devcontainerId},target=/audit,type=volume",
+  "workspaceFolder": "/audit"
 }

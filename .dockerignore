@@ -1,0 +1,10 @@
+*
+!.devcontainer/
+!.devcontainer/Dockerfile
+!.devcontainer/CLAUDE.md
+!scripts/
+!scripts/*.sh
+!scripts/*.py
+!tests/
+!tests/*.sh
+!tests/*.py

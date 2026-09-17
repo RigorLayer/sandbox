@@ -36,10 +36,26 @@ RUN rm -f /etc/sudoers.d/vscode \
     && mkdir -p /home/vscode/.claude /home/vscode/.codex \
     && chown -R vscode:vscode /home/vscode/.claude /home/vscode/.codex
 
-COPY --chown=vscode:vscode CLAUDE.md /home/vscode/.claude/CLAUDE.md
-COPY --chown=vscode:vscode CLAUDE.md /home/vscode/.codex/AGENTS.md
-COPY --chown=vscode:vscode CLAUDE.md /opt/audit/INSTRUCTIONS.md
+COPY --chown=vscode:vscode .devcontainer/CLAUDE.md /home/vscode/.claude/CLAUDE.md
+COPY --chown=vscode:vscode .devcontainer/CLAUDE.md /home/vscode/.codex/AGENTS.md
+COPY --chown=vscode:vscode .devcontainer/CLAUDE.md /opt/audit/INSTRUCTIONS.md
+
+# Docker copies this ownership into a new named volume on first mount.
+# Keep the UID stable: there is no host bind mount requiring UID remapping.
+RUN mkdir -p /audit /opt/audit \
+    && chown root:root /opt/audit /opt/audit/INSTRUCTIONS.md \
+    && chmod 0755 /opt/audit \
+    && chown vscode:vscode /audit \
+    && chmod 0700 /audit \
+    && touch /opt/audit/operation.lock \
+    && chown vscode:vscode /opt/audit/operation.lock \
+    && chmod 0600 /opt/audit/operation.lock
+COPY scripts/clone.sh scripts/reset.sh /usr/local/bin/
+COPY scripts/audit-workflow.py /opt/audit/audit-workflow.py
+COPY tests/ /opt/audit/tests/
+COPY scripts/ /opt/audit/scripts/
+RUN chmod 0755 /usr/local/bin/clone.sh /usr/local/bin/reset.sh
 
 USER vscode
-WORKDIR /workspaces
+WORKDIR /audit
 CMD ["sleep", "infinity"]
