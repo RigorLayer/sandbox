@@ -33,6 +33,6 @@
       }
     }
   },
-  "workspaceMount": "source=audit-${devcontainerId},target=/audit,type=volume",
+  "workspaceMount": "source=audit-${localWorkspaceFolderBasename},target=/audit,type=volume",
   "workspaceFolder": "/audit"
 }

@@ -123,9 +123,9 @@ files outside `/audit`. A restart preserves both the container's writable layer
 and volumes. Recreating the container replaces its writable layer, including
 manual installs and agent login state; the named audit volume remains. Removing
 Docker volumes is a separate, explicitly destructive operation. The volume name
-is `audit-${devcontainerId}`, scoped to this Dev Container identity; moving the
-sandbox or changing its identity may select a different volume. Old volumes
-still require separate cleanup.
+is `audit-${localWorkspaceFolderBasename}` and stays tied to the workspace
+folder. Moving the sandbox or reopening a differently named workspace may select
+a different volume. Old volumes still require separate cleanup.
 
 ## Isolation and limitations
 
